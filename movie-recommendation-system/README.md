@@ -1,55 +1,45 @@
-# CineMatch — Movie Recommendation System
+# CineMatch — Movie Recommendation System 🎬
 
-A beginner-friendly movie recommender built with Python, pandas, scikit-learn, and Streamlit. It uses TF-IDF and cosine similarity to suggest movies with similar genres and descriptions.
+CineMatch recommends similar movies using content-based filtering with TF-IDF and cosine similarity.
 
-## Requirements
-- Python 3.10 or newer recommended
-- Libraries listed in `requirements.txt`
+## Features
+- Searchable movie selection
+- Genre and minimum-rating filters
+- Configurable recommendation count
+- Similarity scores and movie descriptions
+- Dataset validation and helpful error messages
+- Streamlit interface with a responsive two-column recommendation layout
 
-## Run on Windows (VS Code)
+## Run locally (Windows / VS Code)
 
-1. Extract the ZIP file.
-2. Open the extracted `movie-recommendation-system` folder in VS Code.
-3. Open **Terminal → New Terminal**.
-4. Create a virtual environment:
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python -m streamlit run app.py
+```
 
-   ```powershell
-   python -m venv .venv
-   ```
+## Deploy on Streamlit Community Cloud
 
-5. Activate it in PowerShell:
+1. Push `app.py`, `movies.csv`, `requirements.txt`, and `README.md` to GitHub.
+2. In Streamlit Community Cloud, choose **Create app**.
+3. Select your repository and branch.
+4. Set **Main file path** to `app.py` if these files are at the repository root. If they are inside a folder, use `movie-recommendation-system/app.py`.
+5. Deploy.
 
-   ```powershell
-   .\.venv\Scripts\Activate.ps1
-   ```
+**Important:** `movies.csv` must be in the same folder as `app.py`. The app resolves the CSV path relative to the Python file, so it works even if Streamlit starts from another working directory.
 
-   If PowerShell blocks activation, use Command Prompt and run:
+## Dataset format
 
-   ```cmd
-   .venv\Scripts\activate.bat
-   ```
+The CSV must include these columns:
 
-6. Install the libraries:
+- `title`
+- `genre`
+- `rating` (0–10)
+- `description`
 
-   ```powershell
-   python -m pip install -r requirements.txt
-   ```
-
-7. Start the app:
-
-   ```powershell
-   python -m streamlit run app.py
-   ```
-
-8. Open the local URL Streamlit prints in the terminal, usually `http://localhost:8501`.
-
-## Dataset
-`movies.csv` contains a small sample dataset so the project works offline after installation. Ratings are sample values, not live or verified ratings.
+The included CSV contains 20,000 movie records from the [MovieLens 20M dataset](https://grouplens.org/datasets/movielens/20m/). Ratings are average user ratings in that dataset. MovieLens does not include plot summaries, so the `description` values are generated from each movie's genre tags and should not be treated as factual plot descriptions.
 
 ## How it works
-- pandas loads and validates movie data.
-- TF-IDF converts genre and description text into numeric features.
-- Cosine similarity ranks similar movies.
-- Streamlit provides the user interface.
 
-This is content-based filtering; it does not learn preferences from actual user behavior.
+Pandas loads and validates the dataset. Scikit-learn's TF-IDF vectorizer converts movie genre and description text into sparse numerical features, and cosine similarity ranks the movies by textual similarity without constructing a dense all-movies similarity matrix. It is a content-based recommender, not a model trained on the current user's viewing history.
